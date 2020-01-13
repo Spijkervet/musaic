@@ -78,7 +78,7 @@ class MetaEmbedding(Model):
                             param_dict["embed_size"],
                             compile_now=compile_now)
         
-        meta_embedder.load_weights(save_dir + "/meta_embedding_weights")
+        # meta_embedder.load_weights(save_dir + "/meta_embedding_weights")
         
         meta_embedder.freeze()
         if compile_now:

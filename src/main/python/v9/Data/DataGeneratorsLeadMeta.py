@@ -116,7 +116,7 @@ class DataGenerator:
             cur_meta = np.repeat(np.asarray([values], dtype="float"), repeat, axis=0)
                 
         if self.meta_f:
-            cur_meta = self.meta_f(cur_meta.reshape(1, -1)).reshape((-1,))
+            cur_meta = self.meta_f(cur_meta.reshape(1, -1)).reshape((-1,), verbose=1)
         return cur_meta
             
 
@@ -160,6 +160,7 @@ class RhythmGenerator(DataGenerator):
              save_conversion_params=save_conversion_params,
              to_list=to_list, meta_prep_f=meta_prep_f)
         song_iter = self.get_rhythms_together(with_metaData=False)
+
         label_f, self.label_d = label([beat
                                   for instruments in song_iter
                                   for s in instruments
@@ -168,6 +169,7 @@ class RhythmGenerator(DataGenerator):
 
         self.null_elem = ()
         self.V = len(self.label_d)
+
         self.conversion_params["rhythm"] = self.label_d
         if self.save_params_eager:
             self.save_conversion_params()
@@ -340,6 +342,7 @@ class CombinedGenerator(DataGenerator):
         super().__init__(path, 
              save_conversion_params=save_conversion_params,
              to_list=to_list, meta_prep_f=meta_prep_f)
+
         self.rhythm_gen = RhythmGenerator(path, 
                                           save_conversion_params=save_conversion_params,
                                           to_list=to_list,

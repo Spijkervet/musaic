@@ -101,6 +101,6 @@ class MetaPredictor(Model):
                             param_dict["dense_size"],
                             compile_now=compile_now)
         
-        meta_pred.load_weights(save_dir + "/meta_predictor_weights")
+        # meta_pred.load_weights(save_dir + "/meta_predictor_weights")
         
         return meta_pred
