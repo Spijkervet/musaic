@@ -16,6 +16,9 @@ from v9.Nets.CombinedNetwork import CombinedNetwork
 from time import asctime
 import os
 
+import tensorflow as tf
+import keras.backend as K
+
 from tensorflow.python.keras.callbacks import TensorBoard
 
 if __name__ == "__main__":
@@ -113,26 +116,34 @@ if __name__ == "__main__":
 
     tb = TensorBoard(log_dir="/".join([top_dir, save_dir, log_dir]))
 
-    if os.path.isdir("/".join([top_dir, save_dir, weight_dir])):
-        raise FileExistsError("/".join([top_dir, save_dir, weight_dir]) +
-                              " ALREADY EXISTS!")
-    os.makedirs("/".join([top_dir, save_dir, weight_dir]))
+    # if os.path.isdir("/".join([top_dir, save_dir, weight_dir])):
+    #     raise FileExistsError("/".join([top_dir, save_dir, weight_dir]) +
+    #                           " ALREADY EXISTS!")
+
+    if not os.path.exists(os.path.join(top_dir, save_dir, weight_dir)):
+        os.makedirs("/".join([top_dir, save_dir, weight_dir]))
 
 
     # TRAINING LOOP
-    for cur_iteration in range(int(num_epochs/j)):
+    session = tf.Session()
+    K.set_session(session)
 
-        print("\nITERATION ", cur_iteration)
+    with session.as_default():
+        with session.graph.as_default():
 
-        comb_net.fit_generator(data_iter,
-                               steps_per_epoch=cg.num_pieces,
-                               epochs=cur_iteration*j+j,
-                               initial_epoch=cur_iteration*j,
-                               verbose=2, callbacks=[tb])
+            for cur_iteration in range(int(num_epochs/j)):
 
-        cur_folder_name = "/".join([top_dir, save_dir, weight_dir, "/_checkpoint_" + str(cur_iteration)])
-        os.makedirs(cur_folder_name)
-        comb_net.save_model_custom(cur_folder_name)
+                print("\nITERATION ", cur_iteration)
+                
+                comb_net.fit_generator(data_iter,
+                                    steps_per_epoch=cg.num_pieces,
+                                    epochs=cur_iteration*j+j,
+                                    initial_epoch=cur_iteration*j,
+                                    verbose=2, callbacks=[tb])
+
+                cur_folder_name = "/".join([top_dir, save_dir, weight_dir, "/_checkpoint_" + str(cur_iteration)])
+                os.makedirs(cur_folder_name)
+                comb_net.save_model_custom(cur_folder_name)
 
 
 

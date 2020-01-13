@@ -114,9 +114,9 @@ class DataGenerator:
             cur_meta = np.asarray(values, dtype="float")
         else:
             cur_meta = np.repeat(np.asarray([values], dtype="float"), repeat, axis=0)
-                
+        
         if self.meta_f:
-            cur_meta = self.meta_f(cur_meta.reshape(1, -1)).reshape((-1,), verbose=1)
+            cur_meta = self.meta_f(cur_meta.reshape(1, -1)).reshape((-1,))
         return cur_meta
             
 

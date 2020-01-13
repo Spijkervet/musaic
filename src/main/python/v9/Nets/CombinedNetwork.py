@@ -45,8 +45,8 @@ class CombinedNetwork(Model):
                                bar_embedder, rhythm_net, melody_net, meta_predictor,
                                generation=False, compile_now=True):
 
-        # self.session = tf.Session()
-        # K.set_session(self.session)
+        self.session = tf.Session()
+        K.set_session(self.session)
 
         if generation and compile_now:
             raise ValueError("Cannot be used to generate and train at the same time!")
